@@ -1,0 +1,20 @@
+# NFL Big Data Bowl 2026 - Dependencies
+# Core ML/DL
+torch>=2.0.0
+numpy>=1.24.0
+pandas>=2.0.0
+
+# Data processing
+pyarrow>=12.0.0
+
+# Utilities
+tqdm>=4.65.0
+
+# Development (optional)
+jupyter>=1.0.0
+ipykernel>=6.25.0
+
+# Testing (optional)
+pytest>=7.4.0
+pytest-cov>=4.1.0
+

@@ -1,0 +1,130 @@
+NFL Big Data Bowl 2026 - Final Repository Structure
+====================================================
+
+nfl-bdb/
+├── README.md                    # Main README
+├── REFACTOR_SUMMARY.md          # Refactoring summary
+├── GIT_SETUP_COMMANDS.sh        # Git setup script
+├── requirements.txt             # Python dependencies
+├── pyproject.toml              # Project metadata
+├── .gitignore                  # Git ignore rules
+├── config.py                   # Config compatibility wrapper
+│
+├── configs/                    # Configuration files
+│   └── default.py             # Main configuration
+│
+├── src/                        # Source code
+│   └── nfl_bdb/               # Main package
+│       ├── __init__.py
+│       ├── cli.py             # CLI interface
+│       ├── models/            # Model architectures
+│       │   ├── __init__.py
+│       │   ├── stgnn_refine.py
+│       │   └── stgnn_transformer.py
+│       ├── training/          # Training code
+│       │   ├── __init__.py
+│       │   └── train.py
+│       ├── inference/         # Inference code
+│       │   ├── __init__.py
+│       │   ├── inference_dataset.py
+│       │   ├── predict.py
+│       │   └── run_inference.py
+│       ├── evaluation/        # Evaluation code
+│       │   ├── __init__.py
+│       │   └── run_eval.py
+│       ├── preprocessing/     # Data preprocessing
+│       │   ├── __init__.py
+│       │   ├── features.py
+│       │   ├── load.py
+│       │   ├── normalize.py
+│       │   ├── save_sequences.py
+│       │   ├── sequences.py
+│       │   └── utils.py
+│       └── utils/             # Utilities
+│           ├── __init__.py
+│           ├── collate.py
+│           ├── datasets.py
+│           └── graph_builder.py
+│
+├── scripts/                    # CLI scripts
+│   ├── train.py              # Training CLI
+│   ├── infer.py              # Inference CLI
+│   ├── eval.py               # Evaluation CLI
+│   ├── submit.py             # Submission CLI
+│   ├── build_sequences.py    # Preprocessing CLI
+│   └── plot_eval.py         # Plotting utility
+│
+├── tests/                     # Tests
+│   ├── __init__.py
+│   ├── test_models.py
+│   └── test_utils.py
+│
+├── notebooks/                 # Jupyter notebooks
+│   ├── 01_preprocessing_validation.ipynb
+│   └── 02_model_training.ipynb
+│
+├── docs/                      # Documentation
+│   ├── _inventory.md         # Project inventory
+│   ├── PROJECT_OVERVIEW.md   # Project overview
+│   ├── DEVELOPMENT_GUIDE.md  # Development guide
+│   └── USAGE.md              # Usage guide
+│
+├── baseline/                  # Baseline models
+│   ├── __init__.py
+│   ├── evaluation.py
+│   ├── straight_line.py
+│   ├── utils.py
+│   └── visualize.py
+│
+├── archive/                   # Archived files
+│   ├── docs/                 # Historical fix guides
+│   ├── notebooks/            # Backup notebooks
+│   ├── scripts/              # Test scripts
+│   ├── src/                  # Old source structure
+│   └── preprocessing/        # Old preprocessing
+│
+├── data/                      # Data (gitignored)
+│   ├── train/               # Training CSVs
+│   ├── processed/           # Processed sequences
+│   ├── test_sample/         # Test data
+│   └── metadata/            # Metadata
+│
+├── models/                    # Model checkpoints (gitignored)
+│
+└── outputs/                  # Output files (gitignored)
+
+MAIN ENTRYPOINTS:
+================
+
+1. Training:     python scripts/train.py
+2. Inference:    python scripts/infer.py
+3. Evaluation:   python scripts/eval.py
+4. Submission:   python scripts/submit.py
+5. Preprocessing: python scripts/build_sequences.py
+
+PACKAGE STRUCTURE:
+==================
+
+All code is organized under src/nfl_bdb/:
+- nfl_bdb.models       - Model architectures
+- nfl_bdb.training     - Training code
+- nfl_bdb.inference    - Inference code
+- nfl_bdb.evaluation   - Evaluation code
+- nfl_bdb.preprocessing - Data preprocessing
+- nfl_bdb.utils        - Utilities
+
+CONFIGURATION:
+==============
+
+Main config: configs/default.py
+Compatibility: config.py (wrapper)
+
+DOCUMENTATION:
+==============
+
+- README.md - Main documentation
+- docs/PROJECT_OVERVIEW.md - High-level overview
+- docs/DEVELOPMENT_GUIDE.md - Development guidelines
+- docs/USAGE.md - Detailed usage
+- docs/_inventory.md - Component inventory
+
