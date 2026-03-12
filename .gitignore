@@ -54,6 +54,7 @@ models/*.pth
 # Output files
 outputs/
 *.png
+!docs/images/*.png
 *.jpg
 *.pdf
 

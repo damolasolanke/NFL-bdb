@@ -6,35 +6,9 @@ Spatio-Temporal Graph Neural Network (STGNN) for predicting NFL player trajector
 
 ## Architecture
 
-```mermaid
-%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#E3F2FD', 'primaryTextColor': '#1565C0', 'primaryBorderColor': '#1565C0', 'lineColor': '#555', 'secondaryColor': '#FFF3E0', 'tertiaryColor': '#F3E5F5', 'fontSize': '14px'}}}%%
-flowchart LR
-    subgraph DATA["Data · 22 players per frame"]
-        RAW[Tracking CSV<br/>x, y, speed, dir, ...]
-        FE[Feature Engineering<br/>13 node features]
-        SEQ[Sequence Builder<br/>100-frame windows]
-    end
-
-    subgraph MODEL["STGNN · PyTorch"]
-        ENC[Node Encoder<br/>Linear → LayerNorm → GELU]
-        GAT[GAT Layers ×3<br/>Multi-head attention]
-        TF[Temporal Transformer ×4<br/>Positional encoding]
-        REF[Refinement Block<br/>FFN + residual]
-        HEAD[Output Head<br/>→ velocity ∆x, ∆y]
-    end
-
-    subgraph OUT["Inference"]
-        VEL[Velocity Predictions]
-        POS[Position Trajectories<br/>cumsum integration]
-        SUB[Kaggle Submission<br/>Parquet output]
-    end
-
-    RAW --> FE --> SEQ --> ENC --> GAT --> TF --> REF --> HEAD --> VEL --> POS --> SUB
-
-    style DATA fill:#E8F5E9,stroke:#2E7D32,stroke-width:2px,color:#1B5E20
-    style MODEL fill:#E3F2FD,stroke:#1565C0,stroke-width:2px,color:#0D47A1
-    style OUT fill:#F3E5F5,stroke:#6A1B9A,stroke-width:2px,color:#4A148C
-```
+<p align="center">
+  <img src="docs/images/architecture.png" alt="STGNN Architecture" width="100%">
+</p>
 
 ### Model Components
 
@@ -44,41 +18,15 @@ flowchart LR
 | **GAT Layers** (×3) | GATv2 with 8-head attention, dropout 0.1 | Capture spatial interactions between players within 20-yard radius |
 | **Temporal Transformer** (×4) | Transformer encoder, learnable positional embeddings, pre-norm | Model temporal dynamics across 100-frame trajectory windows |
 | **Refinement Block** | `FFN(256→512→256) + LayerNorm + residual` | Refine trajectory representations before output |
-| **Output Head** | `Linear(256→512) → GELU → Linear(512→2)` | Predict per-frame velocity vectors (∆x, ∆y) |
+| **Output Head** | `Linear(256→512) → GELU → Linear(512→2)` | Predict per-frame velocity vectors (Δx, Δy) |
 
 ### Graph Construction
-
-Each frame is represented as a graph where:
 
 | Element | Specification |
 |---------|--------------|
 | **Nodes** | 22 players, each with 13 features (x, y, speed, acceleration, direction, orientation, etc.) |
 | **Edges** | Spatial proximity within 20-yard radius, with 4 edge features (distance, angle, relative velocity) |
 | **Batching** | Custom collation handles variable graph sizes across frames |
-
-### Training → Inference Pipeline
-
-```mermaid
-sequenceDiagram
-    autonumber
-    participant D as Raw CSVs
-    participant P as Preprocessing
-    participant T as Training Loop
-    participant C as Checkpoint
-    participant I as Inference
-    participant S as Submission
-
-    D->>P: input_*.csv + output_*.csv
-    P->>P: Feature engineering (13 dims)
-    P->>P: Normalize + build sequences
-    P->>T: sequences.pkl
-    T->>T: Forward pass → MSE loss on velocities
-    T->>T: AdamW + gradient clipping (1.0)
-    T->>C: best_model.pt (by val loss)
-    C->>I: Load checkpoint
-    I->>I: Predict velocities → cumsum → positions
-    I->>S: submission.parquet
-```
 
 ## Quick Start
 
@@ -158,7 +106,7 @@ nfl-bdb submit  [--input PATH] [--output PATH]
 │   ├── evaluation/               #   Model evaluation metrics
 │   ├── preprocessing/            #   Feature engineering, normalization, sequence building
 │   └── utils/                    #   GraphFeatures dataclass, graph builder, collation
-├── scripts/                      #   CLI entry scripts (train, infer, eval, submit)
+├── scripts/                      #   CLI entry scripts + diagram generation
 ├── tests/                        #   Model + utility tests
 ├── notebooks/                    #   Preprocessing validation, model training
 ├── docs/                         #   Project overview, development guide, usage
