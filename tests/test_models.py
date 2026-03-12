@@ -11,7 +11,8 @@ from pathlib import Path
 project_root = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(project_root))
 
-from nfl_bdb.models import STGNNRefine, GraphFeatures
+from nfl_bdb.models import STGNNRefine
+from nfl_bdb.utils import GraphFeatures
 
 
 def test_stgnn_refine_initialization():

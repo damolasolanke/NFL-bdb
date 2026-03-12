@@ -5,6 +5,7 @@ Provides entrypoints for training, inference, evaluation, and submission generat
 """
 
 import argparse
+import os
 import sys
 from pathlib import Path
 
@@ -104,8 +105,14 @@ def submit_cli(args):
     import pyarrow.parquet as pq
     import numpy as np
     
-    input_path = args.input or "/kaggle/input/nfl-big-data-bowl-2026-prediction/test_input.csv"
-    output_path = args.output or "/kaggle/working/submission.parquet"
+    input_path = args.input or os.environ.get(
+        "KAGGLE_INPUT_PATH",
+        str(config.TEST_SAMPLE_DIR / "test_input.csv")
+    )
+    output_path = args.output or os.environ.get(
+        "KAGGLE_OUTPUT_PATH",
+        "submission.parquet"
+    )
     
     # Fallback for local testing
     if not Path(input_path).exists():
